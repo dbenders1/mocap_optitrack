@@ -1,0 +1,9 @@
+<launch>
+
+  <!-- Run the map server -->
+  <arg name="map_file" default="$(find mocap_optitrack)/maps/LAB_rot.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)">
+    <param name="frame_id" value="odom" />
+  </node>
+
+</launch>

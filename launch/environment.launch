@@ -1,0 +1,7 @@
+<launch>
+
+  <include file="$(find mocap_optitrack)/launch/map_server.launch"/>
+
+  <node pkg="rviz" type="rviz" name="my_rviz" 
+    args="-d $(find mocap_optitrack)/config/opti_env.rviz"/>
+</launch>

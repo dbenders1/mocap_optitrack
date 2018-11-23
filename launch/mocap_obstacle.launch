@@ -1,0 +1,18 @@
+<launch>
+
+  <!-- Pass in mocap_config_file:=/path/to/config.yaml to change options. -->
+  <arg name="mocap_config_file"
+       default="$(find mocap_optitrack)/config/mocap_obstacle.yaml" />
+
+  <node pkg="mocap_optitrack"
+        type="mocap_node"
+        name="mocap_node"
+        respawn="false"
+        launch-prefix=""
+        required="true">
+    <rosparam file="$(arg mocap_config_file)" command="load" />
+  </node>u
+
+<node pkg="tf" type="static_transform_publisher" name="map_odom_broadcaster" args="1.65 2.30 -0.47 0 0 0 map map_mocap 100" />
+
+</launch>
