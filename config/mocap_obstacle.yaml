@@ -13,10 +13,11 @@ rigid_bodies:
         pose2d: mocap_obstacle2/ground_pose
         child_frame_id: obst2/base_link
         parent_frame_id: map_mocap
-#    '30':
-#        pose: mocap_obstacle3/pose
-#        pose2d: mocap_obstacle3/ground_pose
-#        child_frame_id: obst3/base_link
-#        parent_frame_id: map_mocap
-optitrack_config:
-        multicast_address: 224.0.0.1
+    '30':
+        pose: Robot_1/pose
+        pose2d: Robot_1/ground_pose
+#        child_frame_id: Robot_1/base_link
+        child_frame_id: base_link
+        parent_frame_id: odom
+#optitrack_config:
+#        multicast_address: 224.0.0.1
