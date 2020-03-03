@@ -8,7 +8,25 @@ rigid_bodies:
         pose2d: Robot_1/ground_pose
 #        child_frame_id: Robot_1/base_link
         child_frame_id: base_link_track
-        parent_frame_id: map 
+        parent_frame_id: map
+    '31':
+        pose: ped_1/pose
+        pose2d: ped_1/ground_pose
+#        child_frame_id: Robot_1/base_link
+        child_frame_id: ped_1
+        parent_frame_id: map
+    '32':
+        pose: ped_2/pose
+        pose2d: ped_2/ground_pose
+#        child_frame_id: Robot_1/base_link
+        child_frame_id: ped_2
+        parent_frame_id: map
+    '33':
+        pose: ped_3/pose
+        pose2d: ped_3/ground_pose
+#        child_frame_id: Robot_1/base_link
+        child_frame_id: ped_3
+        parent_frame_id: map
 #optitrack_config:
 #        multicast_address: 192.0.0.1
 #        multicast_address: 224.0.0.1

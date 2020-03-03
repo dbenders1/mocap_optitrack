@@ -35,6 +35,9 @@ const char ** DEFAULT_MOCAP_MODEL = SKELETON_WITHOUT_TOES;
 
 const int LOCAL_PORT = 1511;
 
+
+
+
 ////////////////////////////////////////////////////////////////////////
 
 void processMocapData( const char** mocap_model,
