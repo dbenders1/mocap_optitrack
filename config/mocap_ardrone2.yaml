@@ -1,0 +1,9 @@
+#
+# Definition of all trackable objects
+# Identifier corresponds to Trackable ID set in Tracking Tools
+#
+rigid_bodies:
+    '1':
+        pose: ardrone2/pose
+        child_frame_id: ardrone2/base_link
+        parent_frame_id: world
