@@ -16,7 +16,7 @@ This page explains how to setup a connection between the so-called *ROS computer
 
 ## Data streaming
 - Log into the *OptiTrack computer*
-- Start *Motive*
+- Start *Motive 1.x*
 - Create a new project or load a prior project
 - Place the objects with markers attached in the workspace
 - Define rigid objects within the workspace:
@@ -25,6 +25,7 @@ This page explains how to setup a connection between the so-called *ROS computer
 - In the streaming panel:
     - Make sure the "Broadcast Frame Data" is selected
     - Make sure the type "MultiCast" is selected in Advanced Network Settings
+    - Make sure that the IP address is not set to "loopback"
 
 > Note: if you cannot find those panels, click "View" in the menu bar of *Motive*, and choose "Project", "Data streaming". Then you should see those panels.
 
