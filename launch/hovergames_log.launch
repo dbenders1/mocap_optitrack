@@ -1,0 +1,29 @@
+<launch>
+
+  <!-- Pass in mocap_config_file:=/path/to/config.yaml to change options. -->
+  <arg name="mocap_config_file"      		default="$(find mocap_optitrack)/config/hovergames.yaml" />
+
+  <!-- Remap from "/hovergames/pose" to "/mavros/vision_pose/pose" -->   	
+  <node name="pose_throttled" 
+  	type="throttle" 
+  	pkg="topic_tools" 
+  	args="messages /hovergames/pose 50 /mavros/vision_pose/pose" 
+  />
+
+  <!-- Start the optitrack stream -->
+  <node pkg="mocap_optitrack"
+    	type="mocap_node"
+    	name="mocap_node"
+    	respawn="false"
+    	launch-prefix=""
+    	required="true">
+	<rosparam file="$(arg mocap_config_file)" command="load" 
+  />
+  
+  <!-- Start collecting the optitrack stream in a ROS bag -->
+  <node pkg="rosbag"
+  	type="record"
+  	name="rosbag_record"
+  	args="record -o hovergames_log.bag /mavros/vision_pose/pose" 
+  />
+</launch>

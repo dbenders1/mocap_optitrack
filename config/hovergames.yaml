@@ -3,9 +3,9 @@
 # Identifier corresponds to Trackable ID set in Tracking Tools
 #
 rigid_bodies:
-    '2':
+    '1':
         pose: hovergames/pose
-        parent_frame_id: odom
+        frame_id: odom
 
 optitrack_config:
        multicast_address: 224.0.0.1
