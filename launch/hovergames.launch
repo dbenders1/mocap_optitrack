@@ -3,11 +3,16 @@
   <arg name="mocap_config_file" 		default="$(find mocap_optitrack)/config/hovergames.yaml" />
 
 
-  <!-- remap from "/hovergames/pose" to "/mavros/vision_pose/pose" -->   	
-  <node name="pose_throttled"
-  	type="throttle"
-  	pkg="topic_tools"
-  	args="messages /hovergames/pose 50 /mavros/vision_pose/pose" />
+  <!-- remap from mocap topic to specified topic and frequency in the config-->   	
+  <node pkg="mocap_optitrack"
+    	type="remap_node"
+    	name="remap_node"
+    	respawn="false"
+    	launch-prefix=""
+    	required="true"
+    	output="screen">
+    	<rosparam file="$(arg mocap_config_file)" command="load" />
+  </node>
 
 
   <!-- Start the optitrack stream -->  
