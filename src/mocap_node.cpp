@@ -31,107 +31,107 @@ const std::string MULTICAST_IP_DEFAULT = "224.0.0.1";
 
 const std::string MOCAP_MODEL_KEY = "mocap_model";
 const std::string RIGID_BODIES_KEY = "rigid_bodies";
-const char ** DEFAULT_MOCAP_MODEL = SKELETON_WITHOUT_TOES;
+const char** DEFAULT_MOCAP_MODEL = SKELETON_WITHOUT_TOES;
 
 const int LOCAL_PORT = 1511;
 
-
-
-
 ////////////////////////////////////////////////////////////////////////
 
-void processMocapData( const char** mocap_model,
-                       RigidBodyMap& published_rigid_bodies,
-                       const std::string& multicast_ip)
+void processMocapData(const char** mocap_model, RigidBodyMap& published_rigid_bodies, const std::string& multicast_ip)
 {
-  UdpMulticastSocket multicast_client_socket( LOCAL_PORT, multicast_ip );
+  UdpMulticastSocket multicast_client_socket(LOCAL_PORT, multicast_ip);
 
   ushort payload;
   int numberOfPackets = 0;
-  while(ros::ok())
+  while (ros::ok())
   {
     bool packetread = false;
     int numBytes = 0;
+    // std::cout << "Hi" << std::endl;
 
     do
     {
       // Receive data from mocap device
       numBytes = multicast_client_socket.recv();
 
+      // std::cout << "received bytes: " << numBytes << std::endl;
+
       // Parse mocap data
-      if( numBytes > 0 )
+      if (numBytes > 0)
       {
         const char* buffer = multicast_client_socket.getBuffer();
         unsigned short header = *((unsigned short*)(&buffer[0]));
 
         // Look for the beginning of a NatNet package
+        // std::cout << "in the while loop" << std::endl;
+
         if (header == 7)
         {
-          payload = *((ushort*) &buffer[2]);
+          // std::cout << "header is 7" << std::endl;
+          payload = *((ushort*)&buffer[2]);
           MoCapDataFormat format(buffer, payload);
           format.parse();
           packetread = true;
           numberOfPackets++;
 
-          if( format.model.numRigidBodies > 0 )
+          if (format.model.numRigidBodies > 0)
           {
-            for( int i = 0; i < format.model.numRigidBodies; i++ )
+            for (int i = 0; i < format.model.numRigidBodies; i++)
             {
               int ID = format.model.rigidBodies[i].ID;
               RigidBodyMap::iterator item = published_rigid_bodies.find(ID);
 
               if (item != published_rigid_bodies.end())
               {
-                  item->second.publish(format.model.rigidBodies[i]);
+                item->second.publish(format.model.rigidBodies[i]);
               }
             }
           }
         }
         // else skip packet
       }
-    } while( numBytes > 0 );
+    } while (numBytes > 0);
 
     // Don't try again immediately
-    if( !packetread )
+    if (!packetread)
     {
-      usleep( 10 );
+      usleep(10);
     }
   }
 }
 
-
-
 ////////////////////////////////////////////////////////////////////////
 
-int main( int argc, char* argv[] )
-{ 
-  
+int main(int argc, char* argv[])
+{
   // Initialize ROS node
   ros::init(argc, argv, "mocap_node");
   ros::NodeHandle n("~");
 
-  // Get configuration from ROS parameter server  
-  const char** mocap_model( DEFAULT_MOCAP_MODEL );
-  if( n.hasParam( MOCAP_MODEL_KEY ) )
-  {    std::string tmp;
-    if( n.getParam( MOCAP_MODEL_KEY, tmp ) )
+  // Get configuration from ROS parameter server
+  const char** mocap_model(DEFAULT_MOCAP_MODEL);
+  if (n.hasParam(MOCAP_MODEL_KEY))
+  {
+    std::string tmp;
+    if (n.getParam(MOCAP_MODEL_KEY, tmp))
     {
-      if( tmp == "SKELETON_WITH_TOES" )
+      if (tmp == "SKELETON_WITH_TOES")
         mocap_model = SKELETON_WITH_TOES;
-      else if( tmp == "SKELETON_WITHOUT_TOES" )
+      else if (tmp == "SKELETON_WITHOUT_TOES")
         mocap_model = SKELETON_WITHOUT_TOES;
-      else if( tmp == "OBJECT" )
+      else if (tmp == "OBJECT")
         mocap_model = OBJECT;
     }
   }
 
   // Get configuration from ROS parameter server
-  std::string multicast_ip( MULTICAST_IP_DEFAULT );
-  if( n.hasParam( MULTICAST_IP_KEY ) )
+  std::string multicast_ip(MULTICAST_IP_DEFAULT);
+  if (n.hasParam(MULTICAST_IP_KEY))
   {
-    n.getParam( MULTICAST_IP_KEY, multicast_ip );
+    n.getParam(MULTICAST_IP_KEY, multicast_ip);
   }
-  else {
+  else
+  {
     ROS_WARN_STREAM("Could not get multicast address, using default: " << multicast_ip);
   }
 
@@ -139,25 +139,27 @@ int main( int argc, char* argv[] )
 
   if (n.hasParam(RIGID_BODIES_KEY))
   {
-      XmlRpc::XmlRpcValue body_list;
-      n.getParam("rigid_bodies", body_list);
-      if (body_list.getType() == XmlRpc::XmlRpcValue::TypeStruct && body_list.size() > 0)
+    XmlRpc::XmlRpcValue body_list;
+    n.getParam("rigid_bodies", body_list);
+    if (body_list.getType() == XmlRpc::XmlRpcValue::TypeStruct && body_list.size() > 0)
+    {
+      XmlRpc::XmlRpcValue::iterator i;
+      for (i = body_list.begin(); i != body_list.end(); ++i)
       {
-          XmlRpc::XmlRpcValue::iterator i;
-          for (i = body_list.begin(); i != body_list.end(); ++i) {
-              if (i->second.getType() == XmlRpc::XmlRpcValue::TypeStruct) {
-                  PublishedRigidBody body(i->second);
-                  string id = (string&) (i->first);
-                  RigidBodyItem item(atoi(id.c_str()), body);
+        if (i->second.getType() == XmlRpc::XmlRpcValue::TypeStruct)
+        {
+          PublishedRigidBody body(i->second);
+          string id = (string&)(i->first);
+          RigidBodyItem item(atoi(id.c_str()), body);
 
-                  std::pair<RigidBodyMap::iterator, bool> result = published_rigid_bodies.insert(item);
-                  if (!result.second)
-                  {
-                      ROS_ERROR("Could not insert configuration for rigid body ID %s", id.c_str());
-                  }
-              }
+          std::pair<RigidBodyMap::iterator, bool> result = published_rigid_bodies.insert(item);
+          if (!result.second)
+          {
+            ROS_ERROR("Could not insert configuration for rigid body ID %s", id.c_str());
           }
+        }
       }
+    }
   }
 
   // Process mocap data until SIGINT

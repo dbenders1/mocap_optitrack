@@ -4,10 +4,21 @@
 #
 rigid_bodies:
     '1':
-        pose: Robot_1/pose
-        pose2d: Robot_1/ground_pose
+        pose: pedestrian_1/pose
+        pose2d: pedestrian_1/ground_pose
+        child_frame_id: ped1_link
+        parent_frame_id: map
+    '2':
+        pose: pedestrian_2/pose
+        pose2d: pedestrian_2/ground_pose
+        child_frame_id: ped2_link
+        parent_frame_id: map
+    '3':
+        pose: Robot/pose
+        pose2d: Robot/ground_pose
         child_frame_id: base_link
-        parent_frame_id: odom
+        parent_frame_id: map
 optitrack_config:
         #multicast_address: 192.169.209.203
-        multicast_address: 224.0.0.1
+        #multicast_address: 224.0.0.1
+        multicast_address: 192.168.209.81
