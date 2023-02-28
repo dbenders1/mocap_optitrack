@@ -10,6 +10,9 @@
         respawn="false"
         launch-prefix=""
         required="true">
-    <rosparam file="$(arg mocap_config_file)" command="load" />
+    <rosparam file="$(find mocap_optitrack)/config/$(arg mocap_config_file)" command="load" />
   </node>
+
+  <node pkg="tf" type="static_transform_publisher" name="map_odom_broadcaster" args="0 0 0 0 0 0 map map_mocap 100" />
+  <node pkg="tf" type="static_transform_publisher" name="map_odom_broadcaster2" args="0 0 0 0 0 0 map_mocap odom 100" />
 </launch>

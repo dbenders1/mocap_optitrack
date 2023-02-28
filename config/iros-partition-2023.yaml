@@ -3,12 +3,12 @@
 # Identifier corresponds to Trackable ID set in Tracking Tools
 #
 rigid_bodies:
-    '20':
+    '5':
         pose: mocap_obstacle1/pose
         pose2d: mocap_obstacle1/ground_pose
         child_frame_id: obst1/base_link
         parent_frame_id: map_mocap
-    '21':
+    '6':
         pose: mocap_obstacle2/pose
         pose2d: mocap_obstacle2/ground_pose
         child_frame_id: obst2/base_link
