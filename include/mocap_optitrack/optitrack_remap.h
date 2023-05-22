@@ -38,4 +38,7 @@ class OptitrackRemap
         // If first frame is received for storing offset
         bool _first_frame = true;
 
+        // If new state is received
+        bool _received_new = false;
+
 };

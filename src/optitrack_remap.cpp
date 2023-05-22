@@ -19,7 +19,10 @@ void OptitrackRemap::setup()
 
     while(ros::ok())
     {
-        _pub_remap.publish(_msg_remap);
+        if (_received_new)
+        {
+            _pub_remap.publish(_msg_remap);
+        }
 
         ros::spinOnce;
 
@@ -36,5 +39,7 @@ void OptitrackRemap::callback_pose(const geometry_msgs::PoseStamped &msg)
         ROS_INFO_STREAM("data reset for z-axis offset :" << _offset_z);
     }
     _msg_remap = msg;
-    _msg_remap.pose.position.z = _msg_remap.pose.position.z - _offset_z;      
+    _msg_remap.pose.position.z = _msg_remap.pose.position.z - _offset_z; 
+
+    _received_new = true;  
 }
