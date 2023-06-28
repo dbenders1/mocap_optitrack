@@ -1,0 +1,25 @@
+<launch>
+  <!-- Pass in mocap_config_file:=/path/to/config.yaml to change options. -->
+  <arg name="mocap_config_file" 		default="$(find mocap_optitrack)/config/drone2_airlab.yaml" />
+
+
+  <!-- remap from "/drone2/pose" to "/drone2/mavros/vision_pose/pose" -->   	
+  <node name="pose_throttled"
+  	type="throttle"
+  	pkg="topic_tools"
+  	args="messages /drone2/pose 50 /drone2/mavros/vision_pose/pose" />
+
+
+  <!-- Start the optitrack stream -->  
+  <node pkg="mocap_optitrack"
+    	type="mocap_node"
+    	name="mocap_node"
+    	respawn="false"
+    	launch-prefix=""
+    	required="true">
+	<rosparam file="$(arg mocap_config_file)" command="load" />
+  </node>
+
+  <node pkg="mocap_optitrack" type="pose2odom" name="pose2odom" />
+
+</launch>

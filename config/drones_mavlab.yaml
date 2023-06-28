@@ -1,0 +1,22 @@
+#
+# Definition of all trackable objects
+# Identifier corresponds to Trackable ID set in Tracking Tools
+#
+rigid_bodies:
+  "3":
+    pose: drone3/optitrack/pose
+    parent_frame_id: world
+    child_frame_id: drone3_base_link
+
+  "2":
+    pose: drone2/optitrack/pose
+    parent_frame_id: world
+    child_frame_id: drone2_base_link
+
+  "1":
+    pose: drone1/optitrack/pose
+    parent_frame_id: world
+    child_frame_id: drone1_base_link
+
+optitrack_config:
+  multicast_address: 224.0.0.1
